@@ -23,15 +23,14 @@ class  MyDatabase:
     def create_database(self,database_name):
         try:
             mycursor=self.connection.cursor()
-            mycursor.execute(f"create database {database_name}")
+            mycursor.execute(f"create database  if not exists {database_name}")
             
         except Exception as e:
             lg.error("Error creating database: ", e )
             print(e)
             
         
-    def create_table(self, table_name:str,
-                     column_and_typs:str):
+    def create_table(self, create_table_query:str):
         """example:
         ```python
             column_and_types = " PersonID int,
@@ -45,13 +44,22 @@ class  MyDatabase:
         try:
             
             mycursor=self.connection.cursor()
-            query = f"create table if not exists {table_name}({column_and_typs})"
+            
+           
+                
+            query = f"CREATE TABLE IF NOT EXISTS {create_table_query} "
+            print(query)
+            
+            
+            
+            
         
-            mycursor.execute(query)
+        
+            mycursor.execute(create_table_query)
         except Exception as e:
             lg.error("Error creating table : ", e)
             print(e)
-        
+    
     def read_table(self,table_name:str):
         try:
             mycursor=self.connection.cursor()
@@ -72,7 +80,7 @@ class  MyDatabase:
             lg.error("Error updating table : " , e)
             print(e)
             
-    def delete_record(self,parameber):
+    def delete_record(self,parameter):
         pass
     def delete_whole_table(self,table_name):
         try:
@@ -84,11 +92,9 @@ class  MyDatabase:
             
     
     
-con = MyDatabase(user='root',host='localhost',password='tanisha')
-#con.close()
-con.create_database("mydb")
-con.create_table(table_name="abc",
-                 column_and_typs="PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255), City varchar(255)")
-# con.read_table()
-# # con.update_table()
-# # con.delete_table()
+conn = MyDatabase(user='root',host='localhost',password='tanisha')
+#conn.close()
+conn.create_database("test_database")
+
+query1="test(id INT PRIMARY KEY, name VARCHAR(255), marks INT);"
+conn.create_table(create_table_query=query1)
